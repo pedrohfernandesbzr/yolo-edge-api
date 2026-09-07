@@ -1,3 +1,4 @@
 preprocessing/outputs/
 __pycache__/
 runs/
+stream/__pycache__
