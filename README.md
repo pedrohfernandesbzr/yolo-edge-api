@@ -1,14 +1,24 @@
-# yolo-edge-api
+# YoLo Edge API Maker
+
+Este projeto trata-se de uma API para treinamento personalizado e implementação de sistemas de reconhecimento de objetos baseado no Yolo para sistemas embarcados de Edge AI baseado em Linux, em especial, para o Raspberry Pi. Em fundamento, este projeto trata-se de uma atividade do programa Intensivo Maker do PNAAT, realizado no Laboratório Maker Cariri, mas pretendo aperfeiçoá-lo para uso em projetos de código aberto.
+
+**Autor: Pedro Henrique F.**
+
+**Créditos: Programa PNAAT - Lab Maker Cariri**
+
+---
 
 ## 1. Como preparar este repositório na sua máquina?
 
 **Clone repositório:**
+
 git clone https://github.com/pedrohfernandesbzr/yolo-edge-api
 
 
-###Dentro da pasta ~/yolo-edge-api:
+### Dentro da pasta ~/yolo-edge-api:
 
 **Baixar dependências:**
+
 pip install ultralytics flask opencv-python-headless pyyaml dvc --break-system-packages
 
 **Recuperação de Dados (DVC):**
