@@ -114,7 +114,9 @@ class RealtimeDetector:
         self.model = YOLO(model_path)
         self.conf = conf
         self.infer_every = infer_every
-        self.infer_size = infer_size
+        self.infer_size  = infer_size
+	from preprocessing.preprocessor import Preprocessor, PreprocessConfig
+	self.preprocessor = Preprocessor(PreprocessConfig(infer_size=infer_size))
         self._frame_idx = 0
         self._last_boxes = []
         self._last_infer_ms = 0.0
@@ -128,20 +130,21 @@ class RealtimeDetector:
         self._t_last = now
 
         if self._frame_idx % self.infer_every == 0:
-            h, w = frame.shape[:2]
-            small = cv2.resize(frame, (self.infer_size, self.infer_size))
-            t0 = time.perf_counter()
-            results = self.model(small, conf=self.conf, verbose=False)
-            self._last_infer_ms = (time.perf_counter() - t0) * 1000
-            
-            sx, sy = w / self.infer_size, h / self.infer_size
-            self._last_boxes = []
-            for r in results:
-                for box in r.boxes:
-                    x1, y1, x2, y2 = box.xyxy[0].tolist()
-                    label = self.model.names[int(box.cls[0])]
-                    conf = float(box.conf[0])
-                    self._last_boxes.append((label, conf, int(x1*sx), int(y1*sy), int(x2*sx), int(y2*sy)))
+		preproc_result = self.preprocessor.process(frame)
+        	t0 = time.perf_counter()
+        	results = self.model(preproc_result.frame, conf=self.conf, verbose=False)
+        	self._last_infer_ms = (time.perf_counter() - t0) * 1000
+
+	        self._last_boxes = []
+	        for r in results:
+	            for box in r.boxes:
+	                bbox_lb = box.xyxy[0].numpy().reshape(1, 4)
+	                x1, y1, x2, y2 = self.preprocessor.adjust_boxes(bbox_lb, preproc_result)[0]
+	                label = self.model.names[int(box.cls[0])]
+	                conf  = float(box.conf[0])
+	                self._last_boxes.append((
+	                    label, conf, int(x1), int(y1), int(x2), int(y2)
+	                ))
 
         output = frame.copy()
         for (label, conf, x1, y1, x2, y2) in self._last_boxes:
