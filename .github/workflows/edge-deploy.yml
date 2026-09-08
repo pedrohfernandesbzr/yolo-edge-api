@@ -33,7 +33,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.RPI_SSH_KEY }}" | tr -d '\r' > ~/.ssh/dvc_key
           chmod 600 ~/.ssh/dvc_key
-          dvc remote modify --local local_remote keyfile ~/.ssh/dvc_key
+          dvc remote modify --local local_storage keyfile ~/.ssh/dvc_key
           dvc pull
       - name: Disponibiliza o modelo em /app/models
         run: |
@@ -109,7 +109,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.RPI_SSH_KEY }}" | tr -d '\r' > ~/.ssh/dvc_key
           chmod 600 ~/.ssh/dvc_key
-          dvc remote modify --local local_remote keyfile ~/.ssh/dvc_key
+          dvc remote modify --local local_storage keyfile ~/.ssh/dvc_key
           dvc pull
       - name: Recuperar dataset via DVC
         run: dvc pull dataset/exports/epi-v1
