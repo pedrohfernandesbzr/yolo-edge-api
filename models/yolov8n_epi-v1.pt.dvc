@@ -1,0 +1,5 @@
+outs:
+- md5: 63fe9691214dcdebd63a086cfb265698
+  size: 6251370
+  hash: md5
+  path: yolov8n_epi-v1.pt

@@ -4,10 +4,12 @@ Módulo central de pré-processamento de imagens para o projeto yolo-edge-api.
 Integra-se ao pipeline de tempo real e à API REST.
 """
 from dataclasses import dataclass
-from typing import Optional, Tuple
+
 import cv2
 import numpy as np
+
 from preprocessing.utils.letterbox import letterbox
+
 
 @dataclass
 class PreprocessConfig:
@@ -35,11 +37,11 @@ class PreprocessResult:
     scale_y:   float = 1.0   
     pad_w:     int   = 0
     pad_h:     int   = 0
-    orig_size: Tuple[int, int] = (0, 0)
+    orig_size: tuple[int, int] = (0, 0)
 
 class Preprocessor:
     """Encapsula o pipeline de pré-processamento configurável. Thread-safe."""
-    def __init__(self, config: Optional[PreprocessConfig] = None):
+    def __init__(self, config: PreprocessConfig | None = None):
         self.cfg = config or PreprocessConfig()
         if self.cfg.clahe:
             self._clahe = cv2.createCLAHE(
